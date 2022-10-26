@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlsn:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ProjetoSpringbootMVC</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="/materialize/css/materialize.css"  media="screen,projection"/>
+	<link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css"  media="screen,projection"/>
+
+<style type="text/css">
+	
+		form {
+    	
+    	margin-left: 8%; 
+    	margin-right: 8%;
+ 		margin-top: 5%; 
+	}
+	
+	h3{ 
+ 		font-size: serif;
+ 		font-style: oblique; 
+		color: black; 
+ 		margin-left: 15%;  
+     	margin-right: 10%;
+     	margin-top: 3%;
+     
+ 
+  	} 
+
+</style>
+</head>
+<body>
+		
+		<h3>Bem vindo ao Projeto SpringbootMVC de João Pedro</h3>
+		
+  <div class="row">
+    <form class="col s12" action="salvarpessoa" method="post" th:object="${pessoaObj}">
+      <div class="row">
+      
+      <div class="input-field col s6">
+          <input readonly="readonly" name="id"  type="text" class="validate" th:field="*{id}">
+          <label for="id">ID:</label>
+        </div>
+        
+       <div class="input-field col s6">
+          <input placeholder="Nome:" name="nome" type="text" class="validate" th:field="*{nome}">
+          <label for="nome">Nome:</label>
+        </div>
+        <div class="input-field col s6">
+          <input name="sobrenome" type="text" class="validate" th:field="*{sobrenome}">
+          <label for="sobrenome">Sobrenome:</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input name="idade" type="text" class="validate" th:field="*{idade}">
+          <label for="idade">Idade</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input name="email" type="email" class="validate" th:field="*{email}">
+          <label for="email">Email</label>
+        </div>
+      </div>
+   
+	
+	 <button class="btn waves-effect waves-light" type="submit" name="salvar">Salvar
+    <i class="material-icons right">send</i>
+  	</button>
+  	
+</form>
+</div>
+
+	<a href="/listapessoas">ListaDePessoas</a> <!-- href ja faz um get -->
+	<table>
+			
+			<tr th:each ="pessoa : ${pessoas}">
+			<td th:text = "${pessoa.id}"></td>
+			<td th:text = "${pessoa.nome}"></td>
+			<td th:text = "${pessoa.idade}"></td>
+			<td th:text = "${pessoa.email}"></td>
+			<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+		
+			</tr>	
+	</table>
+
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+	<script type="text/javascript" src="materialize/js/materialize.js"></script>
+</body>
+</html>
