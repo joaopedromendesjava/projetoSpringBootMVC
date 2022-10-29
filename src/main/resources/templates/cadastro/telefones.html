@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlsn:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProjetoSpringbootMVC</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<link type="text/css" rel="stylesheet"
+	href="/materialize/css/materialize.css" media="screen,projection" />
+<link type="text/css" rel="stylesheet"
+	href="/materialize/css/materialize.min.css" media="screen,projection" />
+
+<style type="text/css">
+
+body {
+	margin-left: 8%;
+	margin-right: 8%;
+	margin-top: 5%;
+}
+
+
+a {
+	margin-left: 8%;
+	margin-right: 8%;
+	margin-top: 5%;
+}
+
+h3 {
+	font-size: serif;
+	font-style: oblique;
+	color: black;
+	margin-left: 15%;
+	margin-right: 10%;
+	margin-top: 3%;
+}
+</style>
+</head>
+<body>
+
+	<h5>Cadastro de Telefone</h5>
+	<br/>
+	<br/>
+	
+	<div th:each="p: ${pessoaObj}">
+	
+		<div class="row">
+			<p>ID:<span th:text="${p.id}"></span></p>
+					<p>Nome: <span th:text="${p.nome}"></span></p>
+							<p>Sobrenome: <span th:text="${p.sobrenome}"></span></p>
+									<p>Idade: <span th:text="${p.idade}"></span></p>
+											<p>Email: <span th:text="${p.email}"></span></p>
+		</div>
+	
+	</div>
+	
+	
+	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+	<script type="text/javascript" src="materialize/js/materialize.js"></script>
+</body>
+</html>
