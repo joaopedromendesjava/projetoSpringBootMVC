@@ -2,11 +2,16 @@ package com.springboot.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Pessoa implements Serializable {
@@ -17,18 +22,31 @@ public class Pessoa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column(nullable = false)
+	@NotNull(message = "Nome não pode ser nulo")
+	@NotEmpty(message = "Nome não pode ser vazio")
 	private String nome;
 	
-	@Column(nullable = false)
+	@NotNull(message = "Sobrenome não pode ser nulo")					// validações
+	@NotEmpty(message = "Sobrenome nao pode ser vazio")
 	private String sobrenome;
 	
-	@Column(nullable = false)
+	@Min(value = 18, message = "idade inválida") // define a idade minima para cadastro
 	private int idade;
 
-	private String email;
+	@Email(message = "Email não válido", regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
+	private String email; //validação de email..
 	
+	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL) // mapeando para objeto pessoa
+	private java.util.List<Telefone> telefones; //varios telefones para uma pessoa	
 	
+
+	public java.util.List<Telefone> getTelefones() {
+		return telefones;
+	}
+
+	public void setTelefones(java.util.List<Telefone> telefones) {
+		this.telefones = telefones;
+	}
 
 	public int getIdade() {
 		return idade;

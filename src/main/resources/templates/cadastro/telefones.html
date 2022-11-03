@@ -43,20 +43,98 @@ h3 {
 	<br/>
 	<br/>
 	
+	<br/>
+		
+		<div th:each = "m : ${msg}">
+		<span th:text ="${m}"></span>
+		
+		</div>
+		
+	<br/>
+	
+	
 	<div th:each="p: ${pessoaObj}">
 	
 		<div class="row">
 			<p>ID:<span th:text="${p.id}"></span></p>
-					<p>Nome: <span th:text="${p.nome}"></span></p>
-							<p>Sobrenome: <span th:text="${p.sobrenome}"></span></p>
-									<p>Idade: <span th:text="${p.idade}"></span></p>
-											<p>Email: <span th:text="${p.email}"></span></p>
+			<p>Nome: <span th:text="${p.nome}"></span></p>
+			<p>Sobrenome: <span th:text="${p.sobrenome}"></span></p>
+			<p>Idade: <span th:text="${p.idade}"></span></p>
+			<p>Email: <span th:text="${p.email}"></span></p>
 		</div>
-	
 	</div>
+	
+	<h3>Telefones</h3>
+	
+	<div class ="row">
+		<form th:action="@{/addfonePessoa/{pessoaid}(pessoaid=${pessoaObj.id})}" method="post" 
+			class="col s10" onsubmit="validarCampos()? true : false">
+		
+		<div class ="row">
+			<div class="input-field col s5">
+				<label class="active" for="numero">Número:</label>
+				<input id="numero" name ="numero" class="validate">
+			</div>
+			
+			<div class="input-field col s5">
+				<label class="active" for="tipo">Tipo:</label>
+				<input id="tipo" name ="tipo" class="validate">
+			</div>
+		</div>
+		
+		<input type="submit" value="Adicionar" class="waves-effect waves-light btn">
+		
+		
+		</form>
+	</div>
+	
+	<table>
+	<tr th:each="fone : ${telefones}" >
+		<td th:text=${fone.numero}></td>
+		<td th:text=${fone.tipo}></td>
+		<td th:text=${fone.pessoa.id}></td>
+		<td><a th:href="@{/removertelefone/{idtelefone}(idtelefone=${fone.id})}">Excluir</a></td>		
+	</tr>
+	
+	
+	</table>
 	
 	
 	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
 	<script type="text/javascript" src="materialize/js/materialize.js"></script>
+	
+	
+	<script type="text/javascript">
+		
+		function validarCampos(){
+			
+			numero = document.getElementById('numero').value;
+			numero = document.getElementById('tipo').value;
+			
+			if(numero == ''){
+				alert('Numero deve ser informado')
+				
+				return false;
+			}
+			
+			else if(tipo == ''){
+				
+				alert('Tipo deve ser informado');
+				
+				return false;
+			}
+			
+			else{
+					
+				return true;	
+			}		
+		}
+	
+	
+	
+	
+	</script>
+	
+	
 </body>
 </html>
