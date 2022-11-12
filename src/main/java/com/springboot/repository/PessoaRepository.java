@@ -16,4 +16,9 @@ public interface PessoaRepository extends CrudRepository<Pessoa, Long>{ // pede 
 	@Transactional
 	@Query(value = "select p from Pessoa p where p.nome like %:nome%") //usando parametros nomeados
 	 List<Pessoa> findPessoaByName(@Param("nome")String nome);
+
+	@Transactional
+	@Query(value = "select p from Pessoa p where p.nome like %:nome% and p.sexo = :sexo") //usando parametros nomeados
+	 List<Pessoa> findPessoaByNameandsexo(@Param("nome")String nome, @Param("sexo") String sexo);
+
 }

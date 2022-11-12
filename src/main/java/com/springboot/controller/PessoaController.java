@@ -47,6 +47,9 @@ public class PessoaController {
      @RequestMapping(method = RequestMethod.POST, value="**/salvarpessoa") //intercepta os dados pela url e injeta no objeto pessoa
      public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) { // valida e passa obj para retornar msg's
     	 
+    	 pessoa.setTelefones(telefoneRepository.getTelefones(pessoa.getId())); // busca os telefones da pessoa para carregar em memoria
+    	 
+    	 
     	 if(bindingResult.hasErrors()) {
     	
     		 	ModelAndView andView = new ModelAndView("cadastro/cadastropessoa.html");
@@ -65,7 +68,7 @@ public class PessoaController {
     	 } else {
     	 
     		pessoaRepository.save(pessoa);
-  	
+    		
 		   	ModelAndView andView = new ModelAndView("cadastro/cadastropessoa.html");
 		   	Iterable<Pessoa> pessoasIt = pessoaRepository.findAll(); //retorna a lista após salvar, trazendo obj salvo 	
 			andView.addObject("pessoas", pessoasIt); //passa pra lista o obj salvo
@@ -80,8 +83,8 @@ public class PessoaController {
      public ModelAndView pessoas() { //metodo model e view especifica qual a view que será renderizada e quais dados vai usar    	 
      
     	 ModelAndView andView = new ModelAndView("cadastro/cadastropessoa");
-    	 Iterable<Pessoa> pessoasIt = pessoaRepository.findAll();
-    	 andView.addObject("pessoas", pessoasIt);
+    	 Iterable<Pessoa> pessoasIt = pessoaRepository.findAll();  //usa o crudrepository para buscar todos
+    	 andView.addObject("pessoas", pessoasIt);						// retorna todas pessoas para view//
     	 andView.addObject("pessoaObj", new Pessoa());
  
     	 return andView;
@@ -116,15 +119,27 @@ public class PessoaController {
      }
      
      @PostMapping("**/pesquisarpessoa") // intercepta
-     public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa) { //recebe o param enviado pelo campo no front
+     public ModelAndView pesquisar(@RequestParam("nomepesquisa")String nomepesquisa ,
+     @RequestParam("pesquisasexo")String pesquisasexo) { //recebe o param enviado pelo campo no front
     	 
+    	 
+    	 List<Pessoa> pessoas = new ArrayList<Pessoa>(); // vai retornar uma lista apos a verificação
+    	 
+    	 if(pesquisasexo != null && !pesquisasexo.isEmpty()) { // diferente de null e diferente de vazio
+    		 pessoas = pessoaRepository.findPessoaByNameandsexo(nomepesquisa, pesquisasexo); // faz a busca com nome e sexo
+    		    		 
+    	 }else { //se nao busca somente nome
+    		 
+    		 pessoas = pessoaRepository.findPessoaByName(nomepesquisa);
+    		 
+    	 }
     	 ModelAndView andView = new ModelAndView("cadastro/cadastropessoa"); // retorna pra essa view
-    	 
-    	 andView.addObject("pessoas", pessoaRepository.findPessoaByName(nomepesquisa)); // adc o objeto pessoas o que foi buscado
+    	 andView.addObject("pessoas", pessoas); // adc no objeto pessoas o que foi buscado e retorna a lista
     	 andView.addObject("pessoaObj", new Pessoa());
     	 
     	 return andView;
-     }
+    	 
+   }
      
      @GetMapping("/telefones/{idpessoa}")//intercepta dados enviados pela url metodo editar e id
      public ModelAndView telefones(@PathVariable("idpessoa") Long idpessoa){ //tratar e retornar para a view

@@ -1,10 +1,12 @@
 package com.springboot.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.model.Usuario;
 import com.springboot.repository.UsuarioRepository;
@@ -18,6 +20,7 @@ public class ImplementacaoUserDetailsService implements UserDetailsService {
 	private UsuarioRepository usuarioRepository; 
 	
 	@Override
+	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 			Usuario usuario = usuarioRepository.findUserByLogin(username);
@@ -27,7 +30,8 @@ public class ImplementacaoUserDetailsService implements UserDetailsService {
 				throw new UsernameNotFoundException("Usuário não foi encontrado");
 			}
 			
-		return usuario;
+		return new User(usuario.getLogin(), usuario.getSenha(), usuario.isEnabled(),true , true, true, usuario.getAuthorities());
+		// apos logar carrega usuario senha e autoridades, liberando o que for permitido
 	}
 
 }

@@ -28,18 +28,24 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {  // extend
 		 disable() //desativa config. padrao de memoria		
 		.authorizeRequests() //permitir restringir acessos
 		.antMatchers(HttpMethod.GET,"/").permitAll() // qualquer usuario acessa a tela inicial
+		.antMatchers("**/materialize/").permitAll()
+		.antMatchers(HttpMethod.GET,"/cadastropessoa").hasAnyRole("ADMIN") // só é permitido pelo admin
 		.anyRequest().authenticated()
 		.and().formLogin().permitAll() //permite qualquer usuario // cria formulario de login automatico
-		.and().logout() // mapeia url de saida e invalida user autenticado
+		.loginPage("/login") //procurar pagina login
+		.defaultSuccessUrl("/cadastropessoa") // se logar com sucesso acessa tela cadastro
+		.failureUrl("/login?error=true") // se falhar login fica na tela de login mas com param de error
+		.and().logout().logoutSuccessUrl("/login") // mapeia url de saida e invalida user autenticado
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout")); // quando passar url invalida sessão
 	
 	}
 	
-	@Override //Cria autenticação do usuario com dbo ou em memoria
+	@Override //Cr	ia autenticação do usuario com dbo ou em memoria
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
 		
-		auth.userDetailsService(detailsService).passwordEncoder(new BCryptPasswordEncoder()); // recebe usuario da interface e criptografa a senha
+		auth.userDetailsService(detailsService).
+		passwordEncoder(new BCryptPasswordEncoder()); // recebe usuario da interface e criptografa a senha
 		
 		
 		/*
@@ -50,10 +56,9 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {  // extend
 			*/
 		}
 	
-		@Override //ignora URL especificas
-		public void configure(WebSecurity web) throws Exception {
-			web.ignoring().antMatchers("/materialize/**");
-			
-		}
+	@Override // Ignora URL especificas
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/materialize/**");
+	}
 	
 }
