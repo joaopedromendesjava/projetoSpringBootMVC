@@ -33,7 +33,7 @@ public class ReportUtil implements Serializable{
 		//carrega o arquivo jasper passando os dados //caminho e fonte de dados
 		JasperPrint impressoraJasper = JasperFillManager.fillReport(caminhoJasper, new HashMap<>(),jrBeanCollectionDataSource);
 	
-		//exporta para byte para fazer download em pdf
+		//exporta para byte[] para fazer download em pdf
 		return JasperExportManager.exportReportToPdf(impressoraJasper);
 	}
 	

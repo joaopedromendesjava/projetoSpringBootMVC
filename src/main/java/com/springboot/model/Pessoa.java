@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -39,10 +40,6 @@ public class Pessoa implements Serializable {
 	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL) // mapeando para objeto pessoa
 	private java.util.List<Telefone> telefones; //varios telefones para uma pessoa	
 	
-
-	public java.util.List<Telefone> getTelefones() {
-		return telefones;
-	}
 	
 	private String cep;
 	
@@ -60,6 +57,17 @@ public class Pessoa implements Serializable {
 	
 	private String sexo;
 	
+	@ManyToOne
+	private Profissao profissao;
+	
+	
+	public Profissao getProfissao() {
+		return profissao;
+	}
+
+	public void setProfissao(Profissao profissao) {
+		this.profissao = profissao;
+	}
 
 	public String getSexo() {
 		return sexo;
@@ -125,6 +133,10 @@ public class Pessoa implements Serializable {
 		this.bairro = bairro;
 	}
 
+	public java.util.List<Telefone> getTelefones() {
+		return telefones;
+	}
+	
 	public void setTelefones(java.util.List<Telefone> telefones) {
 		this.telefones = telefones;
 	}

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.springboot.model.Pessoa;
 import com.springboot.model.Telefone;
 import com.springboot.repository.PessoaRepository;
+import com.springboot.repository.ProfissaoRepository;
 import com.springboot.repository.TelefoneRepository;
 
 @Controller // le e mapeia os conteudos
@@ -32,15 +35,21 @@ public class PessoaController {
 	@Autowired
 	private TelefoneRepository telefoneRepository;
 	
+	@Autowired
+	private ReportUtil reportUtil;
+	
+	@Autowired
+	private ProfissaoRepository profissaoRepository;
 	
      @RequestMapping(method = RequestMethod.GET, value="/cadastropessoa") //intercepta essa url
 	 public ModelAndView inicio() {
     	 
     	 ModelAndView andView = new ModelAndView("cadastro/cadastropessoa");
     	 Iterable<Pessoa> pessoasIt = pessoaRepository.findAll();
-    	 andView.addObject("pessoas", pessoasIt);
     	 andView.addObject("pessoaObj", new Pessoa()); //inicia a tela com obj vazio, pois form espera um objeto
-    
+    	 andView.addObject("pessoas", pessoasIt);
+    	 andView.addObject("profissoes", profissaoRepository.findAll()); //atributo profissao
+    	  
     	 return andView; 
 	 }
      
@@ -48,7 +57,6 @@ public class PessoaController {
      public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) { // valida e passa obj para retornar msg's
     	 
     	 pessoa.setTelefones(telefoneRepository.getTelefones(pessoa.getId())); // busca os telefones da pessoa para carregar em memoria
-    	 
     	 
     	 if(bindingResult.hasErrors()) {
     	
@@ -73,12 +81,12 @@ public class PessoaController {
 		   	Iterable<Pessoa> pessoasIt = pessoaRepository.findAll(); //retorna a lista após salvar, trazendo obj salvo 	
 			andView.addObject("pessoas", pessoasIt); //passa pra lista o obj salvo
 			andView.addObject("pessoaObj", new Pessoa()); //objeto vazio para o form
+			andView.addObject("profissoes", profissaoRepository.findAll());
 	    	
     	 return andView;
     	 
     	 }
     }
-     
      @RequestMapping(method = RequestMethod.GET, value="/listapessoas")
      public ModelAndView pessoas() { //metodo model e view especifica qual a view que será renderizada e quais dados vai usar    	 
      
@@ -90,7 +98,6 @@ public class PessoaController {
     	 return andView;
      
      }
-     
      @GetMapping("/editarpessoa/{idpessoa}")//intercepta dados enviados pela url metodo editar e id
      public ModelAndView editar(@PathVariable("idpessoa") Long idpessoa){ //tratar e retornar para a view
     	 
@@ -98,9 +105,9 @@ public class PessoaController {
     	 
     	 Optional<Pessoa> pessoa = pessoaRepository.findById(idpessoa); //carrega objeto pessoa do servidor buscando pelo id
     	 andView.addObject("pessoaObj", pessoa.get()); // passa o objeto pessoa pelo parametro pessoaObj 
+    	 andView.addObject("profissoes", profissaoRepository.findAll());
     	 
     	 return andView;
-    	 
     	 
      }
      
@@ -111,11 +118,9 @@ public class PessoaController {
     	 
     	 ModelAndView andView = new ModelAndView("cadastro/cadastropessoa"); // retorna pra essa view
     	 andView.addObject("pessoas", pessoaRepository.findAll()); // retorna todos passando a lista atual (apos delete)
-    	 
     	 andView.addObject("pessoaObj", new Pessoa()); //retorna obj vazio, limpo na tela(form)
-    	 return andView;
     	 
-     
+    	 return andView;
      }
      
      @PostMapping("**/pesquisarpessoa") // intercepta
@@ -138,7 +143,6 @@ public class PessoaController {
     	 andView.addObject("pessoaObj", new Pessoa());
     	 
     	 return andView;
-    	 
    }
      
      @GetMapping("/telefones/{idpessoa}")//intercepta dados enviados pela url metodo editar e id
@@ -152,7 +156,6 @@ public class PessoaController {
     	 andView.addObject("telefones", telefoneRepository.getTelefones(idpessoa));
     	 
     	 return andView;
-    	 
     	 
      }
      @PostMapping("**/addfonePessoa/{pessoaid}") //recebe id pela url e aciona o metodo
@@ -189,8 +192,7 @@ public class PessoaController {
 	    	 andView.addObject("pessoaObj", pessoa);  //retorna para a view com o objeto pai
 	    	 andView.addObject("telefones", telefoneRepository.getTelefones(pessoaid)); //recebe o idpessoa e passa para o repository
 	    	
-	    	 
-    	 return andView;
+	      return andView;
     	 }
 
      }
@@ -208,6 +210,54 @@ public class PessoaController {
     	 
     	 return andView;
      }
+     
+     //metodo que aciona a geração do relatorio, passa os parametros, valida.
+     @GetMapping("**/pesquisarpessoa")
+     public void imprimePDF(@RequestParam("nomepesquisa") String nomepesquisa, 
+    		 @RequestParam("pesquisasexo") String pesquisasexo, String sexo,
+    		 HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse ) throws Exception{
+    	 
+    	 List<Pessoa> pessoas = new ArrayList<Pessoa>();
+    	 
+    	 if(pesquisasexo != null && !pesquisasexo.isEmpty() && 
+    			 nomepesquisa != null && !nomepesquisa.isEmpty()) { //busca por nome e sexo
+    		 
+    		 pessoas = pessoaRepository.findPessoaByNameandsexo(nomepesquisa, pesquisasexo);    		 
+    		 
+    	 }else if (nomepesquisa != null && !nomepesquisa.isEmpty()) { // busca por nome
+    		 
+    		 pessoas = pessoaRepository.findPessoaByName(nomepesquisa);
+
+    	 }else if (pesquisasexo != null && !pesquisasexo.isEmpty()) { // busca por nome
+		    		 
+		    		 pessoas = pessoaRepository.findPessoaByName(sexo);
+
+		 }else { // busca todos
+    		Iterable<Pessoa> iterator = pessoaRepository.findAll();
+    		
+    		for (Pessoa pessoa : iterator) { //varre o iterable e add na lista o que foi recebido na condição
+    			
+    			pessoas.add(pessoa);
+			}
+    	 }
+    	 //chamando o serviço que faz a geração do relatorio
+    	 byte [] pdf = reportUtil.geraRelatorio(pessoas, "pessoa", httpServletRequest.getServletContext());
+    	 
+	    	//Tamanho da resposta do navegador
+	    	 httpServletResponse.setContentLength(pdf.length);
+	    	 
+	    	 //definir na resposta o tipo de arquivo
+	    	 httpServletResponse.setContentType("application/octet-stream");
+	    	 
+	    	 //Definindo cabeçalho da resposta
+	    	 String headkey = "Content-Disposition";
+	    	 String headerValue = String.format("attchament; filename=\"%s\"","relatorio.pdf");
+	    	 httpServletResponse.setHeader(headkey, headerValue);
+	    	 
+	    	 //Finaliza resposta para o navegador
+	    	 httpServletResponse.getOutputStream().write(pdf);    	 
+     }
+     
      
 }
 

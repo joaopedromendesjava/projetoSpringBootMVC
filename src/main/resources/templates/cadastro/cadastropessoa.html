@@ -64,13 +64,12 @@
 			
 			<div class="row">
 				<div class="input-fiel col s5">
-				
 					<label for ="id" class="active">ID:</label><input name="id" th:field="*{id}" readonly="readonly" id ="id"> 
 				
 				</div>
 				<div class="input-fiel col s5">
 					<label for ="nome" class="active">Nome:</label>
-					<input placeholder="Informe o nome" name="nome" th:field="*{nome}" id="nome">		<!-- *{} aponta onde o objeto deve entrar -->
+					<input placeholder="Informe o nome" name="nome" th:field="*{nome}" id="nome">	<!-- *{} aponta onde o objeto deve entrar -->
 					</div>
 				</div>
 
@@ -88,10 +87,21 @@
 				<div class="input-fiel col s5">
 					<label for ="sexo" class="active">Sexo:</label>
 					<select class="browser-default" th:field="*{sexo}">
-					<option value="" disabled selected>--[Selecione]--</option>
-					<option value="MASCULINO" th:text="Masculino"></option>
-					<option value="FEMININO" th:text="Feminino"></option>
+						<option value="" disabled selected>--[Selecione]--</option>
+						<option value="MASCULINO" th:text="Masculino"></option>
+						<option value="FEMININO" th:text="Feminino"></option>
 					</select>
+				</div>
+				
+				<div class="input-fiel col s5">
+					<label for ="profissao" class="active">Profissão:</label>
+					<select class="browser-default" th:field="*{profissao}" id="profissao">
+						<option th:each = "p: ${profissoes}" th:value="${p.id}" th:text="${p.nome}">
+						<!-- each é um for que vai percorrer o atributo profissoes definido no controler, 
+						passando como valor para o banco o id e para tela o nome -->
+						</option>
+					</select>
+					
 				</div>
 				
 				<div class="input-fiel col s5">
@@ -152,25 +162,30 @@
 <fieldset>
 <legend>Campos de Pesquisa</legend>
 	<div class="row">
-		<form action="pesquisarpessoa" method="post">
+		<form action="pesquisarpessoa" method="post" id="pesquisarpessoa">
 	
-				<div class="input-fiel col s5">
+				<div class="input-fiel col s7">
 					<label>Pesquisar por Nome:</label>
 					<input name="nomepesquisa" id="nomepesquisa" class="validate">
 					<button class="btn waves-effect waves-light" type="submit" name="Buscar">Buscar<i class="material-icons right">send</i></button>
 					
 					<button class="btn waves-effect waves-light" value="/listapessoas">Buscar Todas Pessoas
 					<i class="material-icons right">send</i></button>
+					
+					<button class="btn waves-effect waves-light" value="PDF" 
+						onclick="document.getElementById('pesquisarpessoa').method='get'">Relatório PDF
+					<i class="material-icons right">send</i></button>
+					
 				
 				</div>
 				
-				<div class="input-fiel col s5">
+				<div class="input-fiel col s4">
 					<label for="pesquisasexo">Pesquisar por Sexo</label>
-					<select class="browser-default" name ="pesquisasexo" id ="pesquisasexo">
+				<select class="browser-default" name ="pesquisasexo" id ="pesquisasexo">
 					<option value="">--[Todos]--</option>
 					<option value="MASCULINO" th:text="Masculino"></option>
 					<option value="FEMININO" th:text="Feminino"></option>
-					</select>
+				</select>
 					
 				</div>
 				
