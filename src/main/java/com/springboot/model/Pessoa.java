@@ -1,18 +1,26 @@
 package com.springboot.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Pessoa implements Serializable {
@@ -60,6 +68,61 @@ public class Pessoa implements Serializable {
 	@ManyToOne
 	private Profissao profissao;
 	
+	@Enumerated(EnumType.STRING) // trabalhando com enum tipo string (cargos da pessoa )
+	private Cargo cargo;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd") //formato padrao
+	@Temporal(TemporalType.DATE) // para compreender se é data ou data e hora
+	private Date datanascimento;
+	
+	@Lob
+	private byte[] curriculo; // tipo byte para recber arquivo
+	
+	private String nomeFileCurriculo;
+	
+	private String tipoFileCurriculo;
+	
+	
+	
+	
+	public String getNomeFileCurriculo() {
+		return nomeFileCurriculo;
+	}
+	public void setNomeFileCurriculo(String nomeFileCurriculo) {
+		this.nomeFileCurriculo = nomeFileCurriculo;
+	}
+	
+	public String getTipoFileCurriculo() {
+		return tipoFileCurriculo;
+	}
+	
+	public void setTipoFileCurriculo(String tipoFileCurriculo) {
+		this.tipoFileCurriculo = tipoFileCurriculo;
+	}
+	
+	
+	public void setCurriculo(byte[] curriculo) {
+		this.curriculo = curriculo;
+	}
+	
+	public byte[] getCurriculo() {
+		return curriculo;
+	}
+	
+	public void setDatanascimento(Date datanascimento) {
+		this.datanascimento = datanascimento;
+	}
+	
+	public Date getDatanascimento() {
+		return datanascimento;
+	}
+	
+	public void setCargo(Cargo cargo) {
+		this.cargo = cargo;
+	}
+	public Cargo getCargo() {
+		return cargo;
+	}
 	
 	public Profissao getProfissao() {
 		return profissao;
