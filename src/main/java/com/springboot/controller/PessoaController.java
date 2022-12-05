@@ -205,6 +205,7 @@ public class PessoaController {
 		andView.addObject("nomepesquisa", nomepesquisa);
 		
 		return andView;
+		
 	}
 
 	@GetMapping("/telefones/{idpessoa}") // intercepta dados enviados pela url metodo editar e id
