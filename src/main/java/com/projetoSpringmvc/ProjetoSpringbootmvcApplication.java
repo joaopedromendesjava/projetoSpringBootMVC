@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc // implementa recursos de mvc
 public class ProjetoSpringbootmvcApplication implements WebMvcConfigurer {
 
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetoSpringbootmvcApplication.class, args);
 		

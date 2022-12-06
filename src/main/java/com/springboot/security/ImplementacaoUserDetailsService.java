@@ -23,6 +23,7 @@ public class ImplementacaoUserDetailsService implements UserDetailsService {
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+		
 			Usuario usuario = usuarioRepository.findUserByLogin(username);
 		
 			if(usuario == null ) {

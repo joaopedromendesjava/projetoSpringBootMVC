@@ -63,8 +63,8 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Long>{ // pede u
 		
 		Page<Pessoa> pessoas = findAll(example, pageable);
 		
-		
 		return pessoas;
+		
 		
 	}
 	

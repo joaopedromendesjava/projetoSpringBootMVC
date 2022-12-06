@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 @Entity
 public class Usuario implements UserDetails { //implementa uma interface para utilizar os metodos e fazer validacao
 	

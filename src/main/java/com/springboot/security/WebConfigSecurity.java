@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-///			-------   SPRING SECURITY	-------- \\\
+///			-------   SPRING SECURITY	-------- \\
 
 @Configuration // escrevendo classe de configuração
 @EnableWebSecurity //habilita modulo de segurança

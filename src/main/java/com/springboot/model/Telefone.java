@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Telefone {
 	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

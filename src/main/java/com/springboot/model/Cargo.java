@@ -21,6 +21,7 @@ public enum Cargo {
 	
 	public String getNome() {
 		return nome;
+		
 	}
 	
 	public void setValor(String valor) {

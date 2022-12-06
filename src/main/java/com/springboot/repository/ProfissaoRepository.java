@@ -11,5 +11,6 @@ import com.springboot.model.Profissao;
 public interface ProfissaoRepository extends CrudRepository<Profissao, Long>{ 
 	
 	
+	
 
 }

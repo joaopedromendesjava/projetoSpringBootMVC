@@ -27,6 +27,7 @@ public class ReportUtil implements Serializable{
 		//recebe a lista de dados com os atributos e cria lista de dados para o relatorio
 		JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(listDados); 
 		
+		
 		//carrega o caminho do arquivo jasper compilado .jasper
 		String caminhoJasper = context.getRealPath("relatorios") + File.separator + relatorio + ".jasper";
 	
