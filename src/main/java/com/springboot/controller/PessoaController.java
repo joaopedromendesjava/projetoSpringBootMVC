@@ -207,8 +207,6 @@ public class PessoaController {
 		return andView;
 		
 	}
-
-	
 	@GetMapping("/telefones/{idpessoa}") // intercepta dados enviados pela url metodo editar e id
 	public ModelAndView telefones(@PathVariable("idpessoa") Long idpessoa) { // tratar e retornar para a view
 
