@@ -20,7 +20,6 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {  // extend
 	@Autowired
 	private ImplementacaoUserDetailsService detailsService;
 	
-	
 	@Override //configura as solicitações de acesso por http	
 	protected void configure(HttpSecurity http) throws Exception {
 		
