@@ -184,8 +184,6 @@ public class PessoaController {
 
 			response.getOutputStream().write(pessoa.getCurriculo()); // passa o arquivo
 		}
-
-		
 		
 	}
 
